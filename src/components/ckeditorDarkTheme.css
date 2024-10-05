@@ -1,0 +1,131 @@
+:root {
+  /* -- Configuraciones Básicas ----------------------------------------------------------- */
+  
+  /* Overrides the border radius setting in the theme. */
+  --ck-border-radius: 0px;
+  --ck-border-color: transparent !important;
+  --ck-color-toolbar-border: transparent !important;
+
+  /* Overrides the default font size in the theme. */
+  --ck-font-size-base: 14px;
+
+  /* Helper variables to avoid duplication in the colors. */
+  --ck-custom-background: #030712; /* gray-950 de Tailwind */
+  --ck-custom-foreground: #1a1a1a; /* Un tono ligeramente más claro para fondos secundarios */
+  --ck-custom-white: #ffffff; /* Blanco puro */
+
+  /* -- Overrides generic colors. ------------------------------------------------------------- */
+
+  --ck-color-base-foreground: var(--ck-custom-background);
+  --ck-color-focus-border: hsl(208, 90%, 62%); /* Mantener el color de foco */
+  --ck-color-text: #f0f0f0; /* Texto principal claro sobre fondo oscuro */
+  --ck-color-shadow-drop: hsla(0, 0%, 0%, 0.2); /* Sombra externa */
+  --ck-color-shadow-inner: hsla(0, 0%, 0%, 0.1); /* Sombra interna */
+
+  /* -- Overrides the default .ck-button class colors. ---------------------------------------- */
+
+  --ck-color-button-default-background: var(--ck-custom-background);
+  --ck-color-button-default-hover-background: #141414; /* Un gris ligeramente más claro que gray-950 */
+  --ck-color-button-default-active-background: #0f0f0f; /* Aún más oscuro para estado activo */
+  --ck-color-button-default-active-shadow: #141414; /* Sombra en estado activo */
+  --ck-color-button-default-disabled-background: var(--ck-custom-background);
+
+  --ck-color-button-on-background: var(--ck-custom-foreground);
+  --ck-color-button-on-hover-background: #111111; /* Gris oscuro para hover */
+  --ck-color-button-on-active-background: #0d0d0d; /* Más oscuro para activo */
+  --ck-color-button-on-active-shadow: #141414;
+  --ck-color-button-on-disabled-background: var(--ck-custom-foreground);
+
+  --ck-color-button-action-background: hsl(168, 76%, 42%); /* Botones de acción (verde azulado) */
+  --ck-color-button-action-hover-background: hsl(168, 76%, 38%);
+  --ck-color-button-action-active-background: hsl(168, 76%, 36%);
+  --ck-color-button-action-active-shadow: hsl(168, 75%, 34%);
+  --ck-color-button-action-disabled-background: hsl(168, 76%, 42%);
+  --ck-color-button-action-text: var(--ck-custom-white);
+
+  --ck-color-button-save: hsl(120, 100%, 46%); /* Botón Guardar (verde) */
+  --ck-color-button-cancel: hsl(15, 100%, 56%); /* Botón Cancelar (naranja rojizo) */
+
+  /* -- Overrides the default .ck-dropdown class colors. -------------------------------------- */
+
+  --ck-color-dropdown-panel-background: var(--ck-custom-background);
+  --ck-color-dropdown-panel-border: transparent !important;
+
+  /* -- Overrides the default .ck-dialog class colors. ----------------------------------- */
+
+  --ck-color-dialog-background: var(--ck-custom-background);
+  --ck-color-dialog-form-header-border: transparent !important;
+
+  /* -- Overrides the default .ck-splitbutton class colors. ----------------------------------- */
+
+  --ck-color-split-button-hover-background: var(--ck-color-button-default-hover-background);
+  --ck-color-split-button-hover-border: var(--ck-custom-foreground);
+
+  /* -- Overrides the default .ck-input class colors. ----------------------------------------- */
+
+  --ck-color-input-background: var(--ck-custom-background);
+  --ck-color-input-border: transparent !important;
+  --ck-color-input-text: #f0f0f0; /* Texto claro */
+  --ck-color-input-disabled-background: hsl(255, 4%, 21%);
+  --ck-color-input-disabled-border: hsl(250, 3%, 38%);
+  --ck-color-input-disabled-text: hsl(0, 0%, 78%);
+
+  /* -- Overrides the default .ck-labeled-field-view class colors. ---------------------------- */
+
+  --ck-color-labeled-field-label-background: var(--ck-custom-background);
+
+  /* -- Overrides the default .ck-list class colors. ------------------------------------------ */
+
+  --ck-color-list-background: var(--ck-custom-background);
+  --ck-color-list-button-hover-background: var(--ck-color-base-foreground);
+  --ck-color-list-button-on-background: var(--ck-color-base-active);
+  --ck-color-list-button-on-background-focus: var(--ck-color-base-active-focus);
+  --ck-color-list-button-on-text: var(--ck-color-base-background);
+
+  /* -- Overrides the default .ck-balloon-panel class colors. --------------------------------- */
+
+  --ck-color-panel-background: var(--ck-custom-background);
+  --ck-color-panel-border: transparent !important;
+
+  /* -- Overrides the default .ck-toolbar class colors. --------------------------------------- */
+
+  --ck-color-toolbar-background: var(--ck-custom-background);
+  --ck-color-toolbar-border: transparent !important;
+
+  /* -- Overrides the default .ck-tooltip class colors. --------------------------------------- */
+
+  --ck-color-tooltip-background: hsl(252, 7%, 14%);
+  --ck-color-tooltip-text: hsl(0, 0%, 93%);
+  --ck-color-dialog-form-header-border: hsl(300, 97%, 28%);
+
+  /* -- Overrides the default colors used by the ckeditor5-image package. --------------------- */
+
+  --ck-color-image-caption-background: hsl(0, 0%, 97%);
+  --ck-color-image-caption-text: hsl(0, 0%, 20%);
+
+  /* -- Overrides the default colors used by the ckeditor5-widget package. -------------------- */
+
+  --ck-color-widget-blurred-border: hsl(0, 0%, 87%);
+  --ck-color-widget-hover-border: hsl(43, 100%, 68%);
+  --ck-color-widget-editable-focus-background: var(--ck-custom-white);
+
+  /* -- Overrides the default colors used by the ckeditor5-link package. ---------------------- */
+
+  --ck-color-link-default: hsl(190, 100%, 75%);
+
+  /* -- Definiciones adicionales para completar las referencias faltantes ------------------- */
+
+  --ck-color-base-active: hsl(270, 2%, 20%); /* Similar a --ck-color-button-default-active-background */
+  --ck-color-base-active-focus: hsl(270, 2%, 18%); /* Más oscuro para el estado de enfoque */
+  --ck-color-base-background: var(--ck-custom-background); /* Utiliza el fondo personalizado */
+
+  /* -- Opcional: Agregar más variables si es necesario --------------------------------------- */
+
+  /* Ejemplo: Cambiar el color de los títulos */
+  --ck-color-heading1-text: #ffffff;
+  --ck-color-heading2-text: #ffffff;
+  /* Agrega más según tus necesidades */
+
+  --ck-color-toolbar-border: hsl(0, 0%, 0%); /* Borde de la barra de herramientas */
+}
+
