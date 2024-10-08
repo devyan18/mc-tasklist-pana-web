@@ -67,6 +67,15 @@ export default function CustomEditor({
           console.log(data)
         }}
         config={{
+          fontFamily: {
+            options: [
+              'Tahoma, Geneva, sans-serif',
+              'Verdana, Geneva, sans-serif',
+              'Arial, sans-serif',
+              'Geist',
+            ],
+            supportAllValues: false,
+          },
           plugins: [
             Essentials,
             FontFamily,

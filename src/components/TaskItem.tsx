@@ -108,7 +108,7 @@ export function TaskItem({ task }: { task: Task }) {
           />
         </div>
       </div>
-      <p className="text-gray-400 line-clamp-2">
+      <p className="text-gray-400 line-clamp-2 font-primaryBold">
         {convert(task.description, {})}
       </p>
       {task.tags.length > 0 && (

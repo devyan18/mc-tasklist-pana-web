@@ -1,7 +1,41 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 body, html {
   @apply bg-black;
 }
+/* src/index.css */
+
+@font-face {
+  font-family: 'Geist';
+  src: url('./assets/fonts/Geist-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('./assets/fonts/Geist-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('./assets/fonts/Geist-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('./assets/fonts/Geist-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Importa las directivas de Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

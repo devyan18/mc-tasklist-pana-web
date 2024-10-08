@@ -64,7 +64,7 @@ export const TaskList = () => {
         </span>
       </div>
       <div className="flex flex-row gap-4 items-center w-full">
-        <h2 className="text-2xl font-bold pl-3">Tasks</h2>
+        <h2 className="text-2xl pl-3 font-geist font-bold">Tasks</h2>
         <div className="flex flex-row items-center gap-2 w-full">
           <input
             type="checkbox"
@@ -74,7 +74,7 @@ export const TaskList = () => {
             checked={viewCompletes}
             onChange={() => setViewCompletes(!viewCompletes)}
           />
-          <label className="cursor-pointer" htmlFor="view-completed">
+          <label className="cursor-pointer font-geist" htmlFor="view-completed">
             View completed
           </label>
         </div>

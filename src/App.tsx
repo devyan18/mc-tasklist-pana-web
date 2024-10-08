@@ -21,7 +21,7 @@ function App() {
 
   return (
     <>
-      <div className="flex min-w-full h-screen">
+      <div className="flex min-w-full h-screen font-geist">
         <div className="w-full bg-gray-950 flex flex-row  p-6 rounded-3xl shadow-sm shadow-gray-900">
           <TaskList />
           <Divider />

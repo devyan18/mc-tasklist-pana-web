@@ -1,4 +1,4 @@
-import { useEffect, useState, lazy, Suspense } from 'react'
+import { useEffect, useState, lazy, Suspense, useCallback } from 'react'
 import { useSelectedTask } from '../context/SelectedTaskProvider'
 import { FaRegSave } from 'react-icons/fa'
 import { TaskService } from '../services/tasks.service'
@@ -25,7 +25,7 @@ export const Descriptor = () => {
   const [value, setValue] = useState<string>('')
   const { close, isOpen, open } = useModal()
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     const title = value.match(/<h2.*?>(.*?)<\/h2>/)?.[1] || ''
     const description = value.replace(/<h2.*?>(.*?)<\/h2>/, '')
     toast
@@ -51,7 +51,7 @@ export const Descriptor = () => {
       .then(() => {
         sincronize()
       })
-  }
+  }, [selectedTask, value, done, sincronize])
 
   const handlePriority = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setPriority(e.target.value as 'low' | 'medium' | 'high')
@@ -93,6 +93,22 @@ export const Descriptor = () => {
   useEffect(() => {
     setEditable(false)
   }, [idSelectedTask])
+
+  useEffect(() => {
+    // add event listener to save task when user press Ctrl + S or Cmd + S
+    const handleSaveTask = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault()
+        handleSave()
+      }
+    }
+
+    document.addEventListener('keydown', handleSaveTask)
+
+    return () => {
+      document.removeEventListener('keydown', handleSaveTask)
+    }
+  }, [handleSave])
 
   return (
     <div className="text-white w-2/3 pl-4 flex flex-col overflow-hidden justify-start gap-2 max-h-screen">
@@ -225,7 +241,6 @@ export const Descriptor = () => {
           <div className="scrollbar-track-gray-950 scrollbar-thumb-gray-900 scrollbar-thin overflow-y-auto overflow-x-hidden min-h-full">
             {editable ? (
               <Suspense fallback={<h1>Loading...</h1>}>
-                <h2>Preview</h2>
                 <CustomEditor value={value} setValue={setValue} />
               </Suspense>
             ) : (
