@@ -21,17 +21,17 @@ body, html {
 
 @font-face {
   font-family: 'Geist';
-  src: url('/assets/fonts/Geist-Italic.ttf') format('truetype');
+  src: url('/assets/fonts/Geist-Light.ttf') format('truetype');
   font-weight: 400;
-  font-style: italic;
+  font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Geist';
-  src: url('/assets/fonts/Geist-BoldItalic.ttf') format('truetype');
-  font-weight: 700;
-  font-style: italic;
+  src: url('/assets/fonts/Geist-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
   font-display: swap;
 }
 
