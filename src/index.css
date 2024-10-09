@@ -1,6 +1,10 @@
 body, html {
   @apply bg-black;
 }
+
+a {
+  @apply cursor-pointer !important;
+}
 /* src/index.css */
 
 @font-face {
