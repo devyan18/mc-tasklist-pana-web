@@ -166,18 +166,18 @@ export const CreateNewTaskForm = (props: Props) => {
 
       <div className="flex flex-row justify-between">
         <button
-          type="submit"
-          className="bg-purple-800 text-white font-bold py-1 px-4 rounded-xl hover:bg-gray-950 text-xs"
-        >
-          Create
-        </button>
-
-        <button
           type="button"
-          className="bg-gray-900 text-white font-bold py-1 px-4 rounded-xl hover:bg-gray-950 text-xs"
+          className="bg-gray-900 text-white font-geist font-bold py-1 px-4 rounded-xl hover:bg-gray-950 text-xs"
           onClick={props.onClose}
         >
           Cancel
+        </button>
+
+        <button
+          type="submit"
+          className="bg-purple-800 text-white font-geist font-bold py-1 px-4 rounded-xl hover:bg-gray-950 text-xs"
+        >
+          Create
         </button>
       </div>
     </form>

@@ -69,10 +69,10 @@ export default function CustomEditor({
         config={{
           fontFamily: {
             options: [
+              'Geist, sans-serif',
               'Tahoma, Geneva, sans-serif',
               'Verdana, Geneva, sans-serif',
               'Arial, sans-serif',
-              'Geist',
             ],
             supportAllValues: false,
           },

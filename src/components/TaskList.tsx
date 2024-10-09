@@ -59,9 +59,12 @@ export const TaskList = () => {
           alt="User avatar"
           className="w-[42px] h-[42px] rounded-md object-cover"
         />
-        <span className="text-white/80 font-bold text-lg">
-          {toCapitalize(user!.username)}
-        </span>
+        <div className="flex flex-col">
+          <span className="text-white/80 font-bold text-lg">
+            @{toCapitalize(user!.username)}
+          </span>
+          <span className="text-white/70">{toCapitalize(user!.email)}</span>
+        </div>
       </div>
       <div className="flex flex-row gap-4 items-center w-full">
         <h2 className="text-2xl pl-3 font-geist font-bold">Tasks</h2>

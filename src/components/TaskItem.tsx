@@ -7,14 +7,14 @@ import { convert } from 'html-to-text'
 
 const Priority = ({ level }: { level: 'low' | 'medium' | 'high' }) => {
   const colors = {
-    low: 'text-yellow-600',
-    medium: 'text-blue-600',
-    high: 'text-red-600',
+    low: 'text-blue-600',
+    medium: 'text-yellow-600',
+    high: 'text-orange-600',
   }
 
   return (
     <span
-      className={`px-4 text-sm rounded-2xl py-0 ${colors[level]} flex items-center justify-center font-extrabold`}
+      className={`px-4 text-sm rounded-2xl py-0 ${colors[level]} flex items-center justify-center font-geist font-bold`}
     >
       {toCapitalizeFirst(level)}
     </span>
@@ -89,7 +89,7 @@ export function TaskItem({ task }: { task: Task }) {
             <h2
               className={`text-white font-bold hover:underline ${selectedTask?._id === task._id ? 'underline' : ''} line-clamp-1 max-w-96`}
             >
-              {toCapitalizeFirst(task.title)}
+              {toCapitalizeFirst(convert(task.title, {}))}
             </h2>
           </div>
           <span className="text-gray-400 text-sm italic">

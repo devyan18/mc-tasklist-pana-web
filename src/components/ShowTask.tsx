@@ -54,6 +54,9 @@ export default function ShowTask({ value }: { value: string | null }) {
         data={value}
         disabled={true}
         config={{
+          link: {
+            addTargetToExternalLinks: true,
+          },
           plugins: [
             Essentials,
             FontFamily,

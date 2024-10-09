@@ -9,6 +9,8 @@ import { Toggle } from './Toggle'
 import { MdCancel, MdDelete } from 'react-icons/md'
 import { Modal } from './Modal'
 import { useModal } from '../hooks/useModal'
+import { toCapitalizeFirst } from '../utils/texts'
+import { convert } from 'html-to-text'
 
 const ShowTask = lazy(() => import('./ShowTask'))
 const CustomEditor = lazy(() => import('./Editor'))
@@ -118,15 +120,15 @@ export const Descriptor = () => {
             <div>
               <h2>
                 <span>Are you sure you want to delete the task </span>
-                <span className="text-red-500 font-bold">
-                  {selectedTask.title}
+                <span className="text-red-500">
+                  {toCapitalizeFirst(convert(selectedTask.title, {}))}
                 </span>
                 <span> ?</span>
               </h2>
 
               <div className="flex flex-row gap-4 items-center justify-center mt-10">
                 <button
-                  className="hover:bg-gray-950   bg-red-900/50 text-white font-bold py-1 px-4 rounded-xl flex flex-row items-center gap-2 self-start text-sm"
+                  className="hover:bg-gray-950 font-geist bg-red-900/50 text-white py-1 px-4 rounded-xl flex flex-row items-center gap-2 self-start text-sm"
                   onClick={() => {
                     toast
                       .promise(
@@ -150,10 +152,10 @@ export const Descriptor = () => {
                   }}
                 >
                   <MdDelete className="mb-[2px]" />
-                  <span>Delete</span>
+                  <span className="font-geist font-bold">Delete</span>
                 </button>
                 <button
-                  className="hover:bg-gray-950  bg-gray-900 text-white font-bold py-1 px-4 rounded-xl flex flex-row items-center gap-2 self-start text-sm"
+                  className="hover:bg-gray-950 bg-gray-900 text-white py-1 px-4 rounded-xl flex flex-row items-center gap-2 self-start text-sm"
                   onClick={() => {
                     close()
                   }}
@@ -168,7 +170,7 @@ export const Descriptor = () => {
             <div className="flex flex-row justify-start w-full gap-4 items-center">
               {editable && (
                 <button
-                  className="hover:bg-gray-950  bg-gray-900 text-white font-bold py-1 px-4 rounded-xl flex flex-row items-center gap-2 self-start text-sm"
+                  className="hover:bg-gray-950  bg-gray-900 text-white py-1 px-4 rounded-xl flex flex-row items-center gap-2 self-start text-sm"
                   onClick={() => {
                     setEditable(false)
                     setSelectedTask(
@@ -183,7 +185,7 @@ export const Descriptor = () => {
               <button
                 className={`hover:bg-gray-950 ${
                   editable ? 'bg-purple-800' : 'bg-gray-900'
-                } text-white font-bold py-1 px-4 rounded-xl flex flex-row items-center gap-2 self-start text-sm`}
+                } text-white py-1 px-4 rounded-xl flex flex-row items-center gap-2 self-start text-sm`}
                 onClick={() => {
                   toggleEditable()
                 }}
@@ -215,7 +217,7 @@ export const Descriptor = () => {
               )}
               {editable && (
                 <button
-                  className="hover:bg-gray-950  bg-red-900/50 text-white font-bold py-1 px-4 rounded-xl flex flex-row items-center gap-2 self-start text-sm"
+                  className="hover:bg-gray-950  bg-red-900/50 text-white py-1 px-4 rounded-xl flex flex-row items-center gap-2 self-start text-sm"
                   onClick={() => {
                     // TaskService.deleteTask(selectedTask!._id)
                     //   .then(() => {
