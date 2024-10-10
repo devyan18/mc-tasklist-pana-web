@@ -6,6 +6,7 @@ import {
   useState,
 } from 'react'
 import { Task, TaskService } from '../services/tasks.service'
+import { useSession } from './SessionProvider'
 
 type TasksContextType = {
   tasks: Task[]
@@ -23,6 +24,7 @@ const TasksContext = createContext<TasksContextType>({
 
 export function TasksProvider({ children }: { children: ReactNode }) {
   const [tasks, setTasks] = useState<Task[]>([])
+  const { user } = useSession()
 
   const sincronizeTasks = async () => {
     const data = await TaskService.getTasks()
@@ -30,10 +32,12 @@ export function TasksProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    TaskService.getTasks().then((e) => {
-      setTasks(e)
-    })
-  }, [])
+    if (user) {
+      TaskService.getTasks().then((e) => {
+        setTasks(e)
+      })
+    }
+  }, [user])
 
   return (
     <TasksContext.Provider

@@ -1,6 +1,7 @@
 import { HOST_URL } from '../utils/constants'
 
 export type Item = {
+  _id?: string
   id: string
   name: string
   mod: string
@@ -8,10 +9,16 @@ export type Item = {
 }
 
 export class ItemService {
-  static async getItems() {
-    const response = await fetch(`${HOST_URL}/items`, {
-      credentials: 'include',
-    })
+  static async getItems({
+    page = 1,
+    limit = 10,
+  }: {
+    page?: number
+    limit?: number
+  }) {
+    const response = await fetch(
+      `${HOST_URL}/items?page=${page}&limit=${limit}`,
+    )
 
     if (!response.ok) {
       throw new Error('Failed to fetch items')
@@ -19,7 +26,10 @@ export class ItemService {
 
     const data = await response.json()
 
-    return data as Item[]
+    return data.map((item: Item) => ({
+      ...item,
+      id: item._id!.toString(),
+    }))
   }
 
   static async createItem(data: {

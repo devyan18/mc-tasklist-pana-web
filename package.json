@@ -14,6 +14,7 @@
     "@ckeditor/ckeditor5-image": "^43.0.0",
     "@ckeditor/ckeditor5-react": "^9.0.0",
     "@hookform/resolvers": "^3.9.0",
+    "@tanstack/react-router": "^1.64.0",
     "ckeditor-tailwind-reset": "^1.0.5",
     "ckeditor5": "^43.0.0",
     "ckeditor5-premium-features": "^43.0.0",
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@eslint/js": "^9.9.0",
     "@tailwindcss/typography": "^0.5.15",
+    "@tanstack/router-vite-plugin": "^1.64.0",
     "@types/html-to-text": "^9.0.4",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",

@@ -1,10 +1,13 @@
 import { useState } from 'react'
 import { useSession } from '../context/SessionProvider'
 import { SessionService } from '../services/session.service'
+import { useNavigate } from '@tanstack/react-router'
 
 export function SignIn() {
   const [haveAccount, setHaveAccount] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+
+  const navigate = useNavigate()
 
   const { setUser } = useSession()
 
@@ -22,6 +25,13 @@ export function SignIn() {
       .then(({ user }) => {
         console.log(user)
         setUser(user)
+
+        setTimeout(() => {
+          console.log('am here')
+          navigate({
+            to: '/tasks',
+          })
+        }, 200)
       })
       .catch((error) => {
         console.error(error)
@@ -46,6 +56,10 @@ export function SignIn() {
       .then(({ user }) => {
         console.log(user)
         setUser(user)
+
+        navigate({
+          to: '/tasks',
+        })
       })
       .catch((error) => {
         console.error(error)

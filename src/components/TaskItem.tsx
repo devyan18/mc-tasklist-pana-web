@@ -2,7 +2,8 @@ import { useMemo } from 'react'
 import { Task } from '../services/tasks.service'
 import { toCapitalizeFirst } from '../utils/texts'
 import { useSelectedTask } from '../context/SelectedTaskProvider'
-import { IoMdCheckboxOutline } from 'react-icons/io'
+import { LuBadgeCheck } from 'react-icons/lu'
+
 import { convert } from 'html-to-text'
 
 const Priority = ({ level }: { level: 'low' | 'medium' | 'high' }) => {
@@ -71,9 +72,11 @@ export function TaskItem({ task }: { task: Task }) {
 
   return (
     <div
-      className={`flex flex-col gap-2 px-4 py-2 ${
-        selectedTask?._id === task._id ? 'bg-gray-900' : 'bg-gray-950'
-      } border-b-2 border-gray-900 cursor-pointer`}
+      className={`flex flex-col gap-2 px-4 py-2 mx-2 mt-1 hover:bg-gray-900 transition-colors ${
+        selectedTask?._id === task._id
+          ? 'bg-gray-900 rounded-lg'
+          : 'bg-gray-950'
+      } shadow-white border-gray-900 cursor-pointer`}
       onClick={(e) => {
         e.preventDefault()
         setSelectedTask(task)
@@ -81,13 +84,13 @@ export function TaskItem({ task }: { task: Task }) {
     >
       <div className="flex flex-row items-start justify-between cursor-pointer w-full">
         <div className="flex flex-col flex-wrap">
-          <div className="flex flex-row items-center gap-2">
+          <div className="flex flex-row items-center gap-1">
             {task.done && (
-              <IoMdCheckboxOutline className="text-blue-500 text-lg min-w-[24px]" />
+              <LuBadgeCheck className="text-purple-500 min-w-[24px]" />
             )}
 
             <h2
-              className={`text-white font-bold hover:underline ${selectedTask?._id === task._id ? 'underline' : ''} line-clamp-1 max-w-96`}
+              className={`text-white font-medium hover:underline ${selectedTask?._id === task._id ? 'underline' : ''} line-clamp-1 max-w-96`}
             >
               {toCapitalizeFirst(convert(task.title, {}))}
             </h2>

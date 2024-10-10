@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react'
+import { useEffect, type ReactNode } from 'react'
 import { IoMdClose } from 'react-icons/io'
 
 interface ModalProps {
@@ -8,6 +8,24 @@ interface ModalProps {
 }
 
 export const Modal = ({ onClose, isOpen, children }: ModalProps) => {
+  useEffect(() => {
+    // if press ESC close modal
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose()
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleKeyDown)
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [onClose, isOpen])
+
   return (
     <div
       onClick={(e) => e.stopPropagation()}

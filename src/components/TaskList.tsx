@@ -3,20 +3,30 @@ import { TaskService } from '../services/tasks.service'
 import { TaskItem } from './TaskItem'
 import { useTasks } from '../context/TaskProvider'
 import { useLocalStorage } from '../hooks/useLocalStorage'
-import { MdOutlineCreateNewFolder } from 'react-icons/md'
+import { HiFolderAdd } from 'react-icons/hi'
+
+// import { IoCreateOutline } from 'react-icons/md'
 import { useModal } from '../hooks/useModal'
 import { Modal } from './Modal'
 import { CreateNewTaskForm } from './CreateNewTaskForm'
-import { toCapitalize } from '../utils/texts'
-import { useSession } from '../context/SessionProvider'
+import { TbSettingsFilled } from 'react-icons/tb'
+import { ListSettingsForm } from './ListSettingsForm'
 
 export const TaskList = () => {
-  const { user } = useSession()
   const { value: viewCompletes, setValue: setViewCompletes } =
     useLocalStorage<boolean>('view-completes', true)
   const { tasks, setTasks } = useTasks()
   const [searchFilter, setSearchFilter] = useState<string>('')
-  const { close, isOpen, open } = useModal()
+  const {
+    close: closeCreateTask,
+    isOpen: isOpenCreateTask,
+    open: openCreateTask,
+  } = useModal()
+  const {
+    close: closeSettingsList,
+    isOpen: isOpenSettingsList,
+    open: openSettingsList,
+  } = useModal()
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchFilter(e.target.value)
@@ -47,28 +57,37 @@ export const TaskList = () => {
       .catch((err) => console.error(err))
   }, [setTasks])
 
+  useEffect(() => {
+    // press Ctrl + n or Cmd + n to open the modal
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.altKey || e.metaKey) && e.key === 'n') {
+        e.preventDefault()
+        open()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [openCreateTask])
+
   return (
-    <div className="text-white w-1/3 flex flex-col gap-1 overflow-hidden">
-      <Modal isOpen={isOpen} onClose={close}>
-        <CreateNewTaskForm onClose={close} />
+    <div className="text-white w-1/3 flex flex-col gap-1 overflow-hidden pt-2">
+      <Modal isOpen={isOpenCreateTask} onClose={closeCreateTask}>
+        <CreateNewTaskForm onClose={closeCreateTask} />
       </Modal>
-      <div className="flex flex-row gap-4 items-center pl-4 pb-5">
-        <img
-          decoding="async"
-          src={user?.avatar}
-          alt="User avatar"
-          className="w-[42px] h-[42px] rounded-md object-cover"
+      <Modal isOpen={isOpenSettingsList} onClose={closeSettingsList}>
+        <ListSettingsForm
+          onClose={closeSettingsList}
+          setViewCompletes={setViewCompletes}
+          viewCompletes={viewCompletes}
         />
-        <div className="flex flex-col">
-          <span className="text-white/80 font-bold text-lg">
-            @{toCapitalize(user!.username)}
-          </span>
-          <span className="text-white/70">{toCapitalize(user!.email)}</span>
-        </div>
-      </div>
-      <div className="flex flex-row gap-4 items-center w-full">
-        <h2 className="text-2xl pl-3 font-geist font-bold">Tasks</h2>
-        <div className="flex flex-row items-center gap-2 w-full">
+      </Modal>
+      <div className="flex flex-row gap-4 items-center w-full justify-between mb-2">
+        <h2 className="text-2xl pl-3 font-geist font-bold">You Tasks</h2>
+        {/* <div className="flex flex-row items-center gap-2 w-full">
           <input
             type="checkbox"
             name="view-completed"
@@ -80,16 +99,27 @@ export const TaskList = () => {
           <label className="cursor-pointer font-geist" htmlFor="view-completed">
             View completed
           </label>
+        </div> */}
+        <div className="flex flex-row items-center">
+          <button
+            className="hover:bg-gray-900 text-white rounded-md p-2 self-end text-lg mr-1"
+            onClick={(e) => {
+              e.preventDefault()
+              openSettingsList()
+            }}
+          >
+            <TbSettingsFilled />
+          </button>
+          <button
+            className="hover:bg-gray-900 text-white rounded-md p-2 self-end text-lg mr-1"
+            onClick={(e) => {
+              e.preventDefault()
+              openCreateTask()
+            }}
+          >
+            <HiFolderAdd />
+          </button>
         </div>
-        <button
-          className="hover:bg-gray-900 text-white rounded-md p-2 self-end mr-2"
-          onClick={(e) => {
-            e.preventDefault()
-            open()
-          }}
-        >
-          <MdOutlineCreateNewFolder />
-        </button>
       </div>
       <input
         className="bg-gray-950 outline-none px-2 py-1 rounded-md border-2 border-gray-900 mx-2"
@@ -109,7 +139,7 @@ export const TaskList = () => {
                 open()
               }}
             >
-              <MdOutlineCreateNewFolder />
+              <HiFolderAdd />
             </button>
           </div>
         )}

@@ -2,7 +2,7 @@ import { createContext, useState, useEffect, useContext } from 'react'
 import { SessionService } from '../services/session.service'
 import { User } from '../types/user.entity'
 
-type Session = {
+export type Session = {
   user: User | null | undefined
   setUser: (user: User) => void
 }

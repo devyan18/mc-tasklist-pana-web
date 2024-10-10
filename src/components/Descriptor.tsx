@@ -105,15 +105,17 @@ export const Descriptor = () => {
       }
     }
 
-    document.addEventListener('keydown', handleSaveTask)
+    if (editable) {
+      document.addEventListener('keydown', handleSaveTask)
+    }
 
     return () => {
       document.removeEventListener('keydown', handleSaveTask)
     }
-  }, [handleSave])
+  }, [handleSave, editable])
 
   return (
-    <div className="text-white w-2/3 pl-4 flex flex-col overflow-hidden justify-start gap-2 max-h-screen">
+    <div className="text-white w-2/3 pl-4 flex flex-col overflow-hidden justify-start gap-2 max-h-screen pt-2">
       {selectedTask ? (
         <>
           <Modal isOpen={isOpen} onClose={close}>
