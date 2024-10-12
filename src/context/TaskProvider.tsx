@@ -32,11 +32,15 @@ export function TasksProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    if (user) {
-      TaskService.getTasks().then((e) => {
+    if (!user) return
+
+    TaskService.getTasks()
+      .then((e) => {
         setTasks(e)
       })
-    }
+      .catch((e) => {
+        console.error(e)
+      })
   }, [user])
 
   return (
