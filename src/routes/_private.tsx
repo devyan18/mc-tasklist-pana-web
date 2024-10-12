@@ -1,6 +1,5 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { Sidebar } from '../components/Sidebar'
-import { Toaster } from 'react-hot-toast'
 import { Divider } from '../components/Divider'
 
 export const Route = createFileRoute('/_private')({
@@ -28,22 +27,6 @@ export const Route = createFileRoute('/_private')({
           <Outlet />
         </div>
       </div>
-      <Toaster
-        position="bottom-right"
-        gutter={8}
-        containerStyle={{}}
-        containerClassName=""
-        toastOptions={{
-          duration: 5000,
-          style: {
-            background: '#020617',
-            color: '#fff',
-            borderRadius: '8px',
-            borderWidth: '2px',
-            borderColor: '#111827',
-          },
-        }}
-      />
     </>
   ),
 })

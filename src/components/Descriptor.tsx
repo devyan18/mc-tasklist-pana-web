@@ -11,6 +11,7 @@ import { Modal } from './Modal'
 import { useModal } from '../hooks/useModal'
 import { toCapitalizeFirst } from '../utils/texts'
 import { convert } from 'html-to-text'
+import { useSession } from '../context/SessionProvider'
 
 const ShowTask = lazy(() => import('./ShowTask'))
 const CustomEditor = lazy(() => import('./Editor'))
@@ -22,6 +23,8 @@ export const Descriptor = () => {
     useSelectedTask()
   const { tasks } = useTasks()
   const [editable, setEditable] = useState<boolean>(false)
+
+  const { user } = useSession()
 
   const [done, setDone] = useState<boolean>(false)
   const [value, setValue] = useState<string>('')
@@ -113,6 +116,9 @@ export const Descriptor = () => {
       document.removeEventListener('keydown', handleSaveTask)
     }
   }, [handleSave, editable])
+
+  console.log({ selectedTask })
+  console.log({ user })
 
   return (
     <div className="text-white w-2/3 pl-4 flex flex-col overflow-hidden justify-start gap-2 max-h-screen pt-2">
@@ -217,21 +223,10 @@ export const Descriptor = () => {
                   </select>
                 </div>
               )}
-              {editable && (
+              {editable && selectedTask.creator?._id === user?._id && (
                 <button
                   className="hover:bg-gray-950  bg-red-900/50 text-white py-1 px-4 rounded-xl flex flex-row items-center gap-2 self-start text-sm"
                   onClick={() => {
-                    // TaskService.deleteTask(selectedTask!._id)
-                    //   .then(() => {
-                    //     toast.success('Task deleted')
-                    //     sincronize()
-                    //   })
-                    //   .catch(() => {
-                    //     toast.error('Failed to delete task')
-                    //   })
-                    //   .finally(() => {
-                    //     setSelectedTask(null)
-                    //   })
                     open()
                   }}
                 >

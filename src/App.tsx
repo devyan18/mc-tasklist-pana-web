@@ -47,23 +47,7 @@ export default function App() {
 //           <Descriptor />
 //         </div>
 //       </div>
-//       <Toaster
-//         position="bottom-right"
-//         gutter={8}
-//         containerStyle={{}}
-//         containerClassName=""
-//         toastOptions={{
-//           duration: 5000,
-//           style: {
-//             background: '#020617',
-//             color: '#fff',
-//             borderRadius: '8px',
-//             borderWidth: '2px',
-//             borderColor: '#111827',
-//           },
-//         }}
-//       />
-//     </>
+//
 //   )
 // }
 

@@ -15,7 +15,7 @@ const Priority = ({ level }: { level: 'low' | 'medium' | 'high' }) => {
 
   return (
     <span
-      className={`px-4 text-sm rounded-2xl py-0 ${colors[level]} flex items-center justify-center font-geist font-bold`}
+      className={`px-4 text-sm rounded-2xl py-0 ${colors[level]} flex items-center justify-center font-geist font-medium`}
     >
       {toCapitalizeFirst(level)}
     </span>

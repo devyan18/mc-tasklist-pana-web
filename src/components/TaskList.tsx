@@ -17,6 +17,12 @@ export const TaskList = () => {
     useLocalStorage<boolean>('view-completes', true)
   const { tasks, setTasks } = useTasks()
   const [searchFilter, setSearchFilter] = useState<string>('')
+  const { value: viewHighPriority, setValue: setViewHighPriority } =
+    useLocalStorage('view-high-priority', true)
+  const { value: viewMediumPriority, setValue: setViewMediumPriority } =
+    useLocalStorage('view-medium-priority', true)
+  const { value: viewLowPriority, setValue: setViewLowPriority } =
+    useLocalStorage('view-low-priority', true)
   const {
     close: closeCreateTask,
     isOpen: isOpenCreateTask,
@@ -34,6 +40,18 @@ export const TaskList = () => {
 
   const filteredTasks = tasks.filter((task) => {
     if (!viewCompletes && task.done) {
+      return false
+    }
+
+    if (task.priority === 'high' && !viewHighPriority) {
+      return false
+    }
+
+    if (task.priority === 'medium' && !viewMediumPriority) {
+      return false
+    }
+
+    if (task.priority === 'low' && !viewLowPriority) {
       return false
     }
 
@@ -83,6 +101,12 @@ export const TaskList = () => {
           onClose={closeSettingsList}
           setViewCompletes={setViewCompletes}
           viewCompletes={viewCompletes}
+          setViewHighPriority={setViewHighPriority}
+          viewHighPriority={viewHighPriority}
+          setViewMediumPriority={setViewMediumPriority}
+          viewMediumPriority={viewMediumPriority}
+          setViewLowPriority={setViewLowPriority}
+          viewLowPriority={viewLowPriority}
         />
       </Modal>
       <div className="flex flex-row gap-4 items-center w-full justify-between mb-2">

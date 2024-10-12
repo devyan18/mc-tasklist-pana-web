@@ -4,7 +4,7 @@ import { User } from '../types/user.entity'
 
 export type Session = {
   user: User | null | undefined
-  setUser: (user: User) => void
+  setUser: (user: User | null) => void
 }
 
 const SessionContext = createContext<Session>({

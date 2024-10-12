@@ -58,4 +58,17 @@ export class SessionService {
 
     return response.json()
   }
+
+  static async signOut() {
+    const response = await fetch(`${HOST_URL}/auth/sign-out`, {
+      method: 'POST',
+      credentials: 'include',
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to sign out')
+    }
+
+    return true
+  }
 }
