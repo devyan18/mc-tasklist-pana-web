@@ -1,4 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { Colors, Tag } from '../types/tag.entity'
+import { useTasks } from '../context/TaskProvider'
+import { TaskService } from '../services/tasks.service'
+import { colors, getTagBackgroundColor } from './TagInput'
+import { TagSettingsItem } from './TagSettingsItem'
 
 type Props = {
   onClose: () => void
@@ -21,6 +26,8 @@ export const ListSettingsForm = (props: Props) => {
     props.viewMediumPriority,
   )
   const [viewLowPriority, setViewLowPriority] = useState(props.viewLowPriority)
+  const [tagList, setTagList] = useState<Tag[]>([])
+  const { tasks } = useTasks()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -31,8 +38,18 @@ export const ListSettingsForm = (props: Props) => {
     props.setViewLowPriority(viewLowPriority)
     props.onClose()
   }
+
+  useEffect(() => {
+    TaskService.getAllTags().then((tags) => {
+      setTagList(tags)
+    })
+  }, [tasks])
+
   return (
-    <form className="flex flex-col w-[380px]" onSubmit={handleSubmit}>
+    <form
+      className="flex flex-col w-[380px] min-h-[500px] max-h-[560px]"
+      onSubmit={handleSubmit}
+    >
       <h2 className="font-bold text-lg">Setup Task List</h2>
       <span className="font-medium mt-2">Visualization:</span>
       <div className="ml-4 mb-2">
@@ -102,9 +119,27 @@ export const ListSettingsForm = (props: Props) => {
         </div>
       </div>
 
-      <span className="font-medium mt-2">Order:</span>
+      <span className="font-medium my-2">Tags:</span>
 
-      <div className="flex flex-row justify-between mt-6">
+      {/* <input type="search" name="tag" id="" /> */}
+      <div className="flex flex-col gap-1 items-start overflow-y-auto flex-1">
+        {tagList.map((tag, index) => (
+          <TagSettingsItem
+            index={index}
+            key={tag._id}
+            tag={tag}
+            colors={Object.keys(colors).map((e) => ({
+              text: e,
+              bg: getTagBackgroundColor({
+                name: tag.name,
+                color: e as Colors,
+              }),
+            }))}
+          />
+        ))}
+      </div>
+
+      <div className="flex flex-row justify-between mt-auto">
         <button
           type="button"
           className="bg-gray-900 text-white font-geist font-bold py-1 px-4 rounded-xl hover:bg-gray-950 text-xs"

@@ -1,12 +1,13 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { Task, TaskService } from '../services/tasks.service'
 import { useLocalStorage } from '../hooks/useLocalStorage'
+import { Tag } from '../types/tag.entity'
 
 type SelectedTaskContextType = {
   selectedTask: Task | null
   setSelectedTask: (task: Task | null) => void
-  tags: string[]
-  setTags: (tags: string[]) => void
+  tags: Tag[]
+  setTags: (tags: Tag[]) => void
   priority: 'low' | 'medium' | 'high'
   setPriority: (priority: 'low' | 'medium' | 'high') => void
 }
@@ -17,7 +18,7 @@ const SelectedTaskContext = createContext<SelectedTaskContextType>({
     return task
   },
   tags: [],
-  setTags: (tags: string[]) => {
+  setTags: (tags: Tag[]) => {
     return tags
   },
   priority: 'low',
@@ -43,7 +44,7 @@ export function SelectedTaskProvider({
     }
   }
 
-  const handleChangeTags = (tags: string[]) => {
+  const handleChangeTags = (tags: Tag[]) => {
     if (value) {
       setValue({ ...value, tags })
     }

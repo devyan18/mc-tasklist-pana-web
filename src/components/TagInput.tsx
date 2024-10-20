@@ -1,41 +1,38 @@
 // src/components/TagInput.tsx
+import { useEffect, useState } from 'react'
 import { useSelectedTask } from '../context/SelectedTaskProvider'
+import { Colors, Tag } from '../types/tag.entity'
+import { TaskService } from '../services/tasks.service'
+import { useTasks } from '../context/TaskProvider'
 
 // Definición de los colores disponibles
-export const colors: string[] = [
-  'bg-red-800',
-  'bg-yellow-800',
-  'bg-green-800',
-  'bg-blue-800',
-  'bg-indigo-800',
-  'bg-purple-800',
-  'bg-pink-800',
-  'bg-teal-800',
-  'bg-orange-800',
-  'bg-cyan-800',
-  'bg-lime-800',
-  'bg-emerald-800',
-]
+export const colors = {
+  light_gray: 'bg-gray-500',
+  gray: 'bg-gray-800',
+  brown: 'bg-orange-900',
+  orange: 'bg-orange-700',
+  yellow: 'bg-yellow-700',
+  green: 'bg-green-700',
+  blue: 'bg-blue-700',
+  purple: 'bg-purple-700',
+  pink: 'bg-pink-700',
+  red: 'bg-red-700',
+}
 
-// Función para obtener el color basado en la primera letra de la etiqueta
-export const getColorByFirstLetter = (tag: string): string => {
-  if (!tag || tag.length === 0) return colors[0] // Color por defecto si la etiqueta está vacía
+export const getRandomColor = () => {
+  const keys = Object.keys(colors) as Colors[]
+  return keys[Math.floor(Math.random() * keys.length)]
+}
 
-  const firstChar = tag[0].toLowerCase()
-  const charCode = firstChar.charCodeAt(0)
-
-  // Verificar si el primer carácter es una letra (a-z)
-  if (charCode < 97 || charCode > 122) {
-    return colors[0] // Color por defecto si no es una letra
-  }
-
-  // Calcular el índice basado en la posición de la letra en el alfabeto
-  const index = (charCode - 97) % colors.length
-  return colors[index]
+export const getTagBackgroundColor = (tag: Tag): string => {
+  const color = tag.color
+  return colors[color] || colors.gray
 }
 
 export const TagInput = ({ editable }: { editable: boolean }) => {
   const { tags, setTags } = useSelectedTask()
+  const [tagSuggestions, setTagSuggestions] = useState<Tag[]>([])
+  const { tasks } = useTasks()
 
   const handleAddTag = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -43,10 +40,25 @@ export const TagInput = ({ editable }: { editable: boolean }) => {
     const input = form.elements.namedItem('tag') as HTMLInputElement
 
     if (input.value.trim().length > 0) {
-      setTags([...tags, input.value.trim()])
+      setTags([
+        ...tags,
+        {
+          _id: '',
+          name: input.value.trim(),
+          color:
+            (tagSuggestions.find((e) => e.name == input.value.trim())
+              ?.color as Colors) || getRandomColor(),
+        },
+      ])
       input.value = ''
     }
   }
+
+  useEffect(() => {
+    TaskService.getAllTags().then((tags) => {
+      setTagSuggestions(tags)
+    })
+  }, [tasks])
 
   return (
     <div className="flex flex-col items-start w-full">
@@ -55,18 +67,26 @@ export const TagInput = ({ editable }: { editable: boolean }) => {
           <input
             type="text"
             name="tag"
+            list="tagsList"
+            autoComplete="off"
             placeholder="Tag"
             className="bg-gray-950 text-white outline-none px-2 py-1 rounded-md border-2 border-gray-900 mb-2 text-xs"
           />
+
+          <datalist id="tagsList">
+            {tagSuggestions.map((tag) => (
+              <option key={tag._id} value={tag.name} />
+            ))}
+          </datalist>
         </form>
       )}
       <div className="flex gap-2 flex-wrap">
         {tags.map((tag, index) => (
           <span
             key={index}
-            className={`text-white px-3 rounded-xl ${getColorByFirstLetter(tag)} text-sm`}
+            className={`text-white px-3 rounded-xl ${getTagBackgroundColor(tag)} text-sm`}
           >
-            {tag}
+            {tag.name}
 
             {editable && (
               <button

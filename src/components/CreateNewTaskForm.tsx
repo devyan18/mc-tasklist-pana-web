@@ -1,11 +1,12 @@
-import { useState } from 'react'
-import { getColorByFirstLetter } from './TagInput'
+import { useEffect, useState } from 'react'
+import { getRandomColor, getTagBackgroundColor } from './TagInput'
 import { TaskService } from '../services/tasks.service'
 import { toast } from 'react-hot-toast'
 import { useTasks } from '../context/TaskProvider'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import z, { string } from 'zod'
+import { Colors, Tag } from '../types/tag.entity'
 
 type Props = {
   onClose: () => void
@@ -27,7 +28,9 @@ const createTaskSchema = z.object({
 })
 
 export const CreateNewTaskForm = (props: Props) => {
-  const [tags, setTags] = useState<string[]>([])
+  const [tags, setTags] = useState<Tag[]>([])
+  const { tasks } = useTasks()
+  const [tagSuggestions, setTagSuggestions] = useState<Tag[]>([])
   const { sincronize } = useTasks()
 
   const {
@@ -55,6 +58,12 @@ export const CreateNewTaskForm = (props: Props) => {
       toast.error('Failed to create task')
     }
   }
+
+  useEffect(() => {
+    TaskService.getAllTags().then((tags) => {
+      setTagSuggestions(tags)
+    })
+  }, [tasks])
 
   return (
     <form
@@ -130,12 +139,22 @@ export const CreateNewTaskForm = (props: Props) => {
         <input
           type="text"
           name="tag"
+          autoComplete="off"
+          list="tagsList"
           onKeyDownCapture={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault()
               const input = e.target as HTMLInputElement
-              if (input.value.trim().length > 0) {
-                setTags([...tags, input.value.trim()])
+              if (input.value.trim()?.length > 0) {
+                setTags([
+                  ...tags,
+                  {
+                    name: input.value.trim(),
+                    color:
+                      (tagSuggestions.find((e) => e.name == input.value.trim())
+                        ?.color as Colors) || getRandomColor(),
+                  },
+                ])
                 input.value = ''
               }
             }
@@ -145,13 +164,19 @@ export const CreateNewTaskForm = (props: Props) => {
         />
       </div>
 
+      <datalist id="tagsList">
+        {tagSuggestions?.map((tag) => (
+          <option key={tag._id} value={tag.name} />
+        ))}
+      </datalist>
+
       <div className="flex flex-row flex-wrap">
         {tags.map((tag, index) => (
           <span
             key={index}
-            className={`text-white px-3 rounded-xl ${getColorByFirstLetter(tag)} text-sm`}
+            className={`text-white px-3 rounded-xl ${getTagBackgroundColor(tag)} text-sm`}
           >
-            {tag}
+            {tag.name}
             <button
               className="ml-2"
               onClick={() => {

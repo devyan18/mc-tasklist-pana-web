@@ -1,3 +1,4 @@
+import { ICreateTag, Tag } from '../types/tag.entity'
 import { User } from '../types/user.entity'
 import { HOST_URL } from '../utils/constants'
 import { Item } from './item.service'
@@ -7,7 +8,7 @@ export type Task = {
   title: string
   description: string
   done: boolean
-  tags: string[]
+  tags: Tag[]
   creator: User
   priority: 'low' | 'medium' | 'high'
   items: Item[]
@@ -39,7 +40,7 @@ export class TaskService {
     title: string
     description: string
     priority: 'low' | 'medium' | 'high'
-    tags: string[]
+    tags: ICreateTag[]
   }) {
     const response = await fetch(`${HOST_URL}/tasks`, {
       method: 'POST',
@@ -94,6 +95,54 @@ export class TaskService {
 
     if (!response.ok) {
       throw new Error('Failed to delete task')
+    }
+
+    return true
+  }
+
+  static async getAllTags() {
+    const response = await fetch(`${HOST_URL}/tags`, {
+      credentials: 'include',
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch tags')
+    }
+
+    const { tags } = await response.json()
+
+    return tags as Tag[]
+  }
+
+  static async changeTagColor(tagId: string, color: string) {
+    const response = await fetch(`${HOST_URL}/tags/${tagId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ color }),
+      credentials: 'include',
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to change tag color')
+    }
+
+    return true
+  }
+
+  static async changeTagName(tagId: string, name: string) {
+    const response = await fetch(`${HOST_URL}/tags/${tagId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name }),
+      credentials: 'include',
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to change tag name')
     }
 
     return true

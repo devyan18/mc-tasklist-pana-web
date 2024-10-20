@@ -1,10 +1,12 @@
-import { useMemo } from 'react'
 import { Task } from '../services/tasks.service'
 import { toCapitalizeFirst } from '../utils/texts'
 import { useSelectedTask } from '../context/SelectedTaskProvider'
 import { LuBadgeCheck } from 'react-icons/lu'
 
 import { convert } from 'html-to-text'
+import { getTagBackgroundColor } from './TagInput'
+import { Tag } from '../types/tag.entity'
+import { useEffect, useState } from 'react'
 
 const Priority = ({ level }: { level: 'low' | 'medium' | 'high' }) => {
   const colors = {
@@ -22,47 +24,65 @@ const Priority = ({ level }: { level: 'low' | 'medium' | 'high' }) => {
   )
 }
 
-export const colors: string[] = [
-  'bg-red-800',
-  'bg-yellow-800',
-  'bg-green-800',
-  'bg-blue-800',
-  'bg-indigo-800',
-  'bg-purple-800',
-  'bg-pink-800',
-  'bg-teal-800',
-  'bg-orange-800',
-  'bg-cyan-800',
-  'bg-lime-800',
-  'bg-emerald-800',
-]
+interface TagWithColorProps {
+  tag: Tag
+}
 
-export const getColorByFirstLetter = (tag: string): string => {
-  if (!tag || tag.length === 0) return colors[0] // Color por defecto si la etiqueta está vacía
+type TimeAgoProps = {
+  timestamp: Date
+  locale?: string
+}
 
-  const firstChar = tag[0].toLowerCase()
-  const charCode = firstChar.charCodeAt(0)
+const timeAgo = (timestamp: Date, locale: string = 'en'): string => {
+  const now = new Date()
+  const diffInSeconds = Math.floor((now.getTime() - timestamp.getTime()) / 1000)
 
-  // Verificar si el primer carácter es una letra (a-z)
-  if (charCode < 97 || charCode > 122) {
-    return colors[0] // Color por defecto si no es una letra
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' })
+
+  const units = [
+    { unit: 'year', value: 60 * 60 * 24 * 365 },
+    { unit: 'month', value: 60 * 60 * 24 * 30 },
+    { unit: 'day', value: 60 * 60 * 24 },
+    { unit: 'hour', value: 60 * 60 },
+    { unit: 'minute', value: 60 },
+    { unit: 'second', value: 1 },
+  ]
+
+  for (const { unit, value } of units) {
+    const elapsed = Math.floor(diffInSeconds / value)
+    if (elapsed > 0) {
+      return rtf.format(-elapsed, unit as Intl.RelativeTimeFormatUnit)
+    }
   }
 
-  // Calcular el índice basado en la posición de la letra en el alfabeto
-  const index = (charCode - 97) % colors.length
-  return colors[index]
+  return rtf.format(0, 'second')
 }
 
-interface TagWithColorProps {
-  tag: string
+const TimeAgo: React.FC<TimeAgoProps> = ({ timestamp, locale = 'en' }) => {
+  const [timeAgoText, setTimeAgoText] = useState<string>(() =>
+    timeAgo(timestamp, locale),
+  )
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeAgoText(timeAgo(timestamp, locale))
+    }, 30000) // Actualiza cada 30 segundos
+
+    // Limpia el intervalo cuando el componente se desmonta
+    return () => clearInterval(interval)
+  }, [timestamp, locale])
+
+  return <span>{timeAgoText}</span>
 }
+
+export default TimeAgo
 
 const TagWithColor: React.FC<TagWithColorProps> = ({ tag }) => {
-  const colorClass = useMemo(() => getColorByFirstLetter(tag), [tag])
-
   return (
-    <span className={`text-white px-3 text-sm rounded-xl ${colorClass}`}>
-      {tag}
+    <span
+      className={`text-white px-3 text-sm rounded-xl ${getTagBackgroundColor(tag)}`}
+    >
+      {tag.name}
     </span>
   )
 }
@@ -90,15 +110,13 @@ export function TaskItem({ task }: { task: Task }) {
             )}
 
             <h2
-              className={`text-white font-medium hover:underline ${selectedTask?._id === task._id ? 'underline' : ''} line-clamp-1 max-w-96`}
+              className={`font-medium hover:underline ${selectedTask?._id === task._id ? 'text-white' : 'text-white/75'} line-clamp-1 max-w-96`}
             >
               {toCapitalizeFirst(convert(task.title, {}))}
             </h2>
           </div>
-          <span className="text-gray-400 text-sm italic">
-            {new Date(task.createdAt).toLocaleDateString()}
-            {' - '}
-            {new Date(task.createdAt).toLocaleTimeString()}
+          <span className="text-gray-400 text-xs italic">
+            <TimeAgo timestamp={new Date(task.updatedAt)} />
           </span>
         </div>
         <div className="flex flex-row gap-2">
@@ -111,17 +129,14 @@ export function TaskItem({ task }: { task: Task }) {
           />
         </div>
       </div>
-      <p className="text-gray-400 line-clamp-2 font-primaryBold">
-        {convert(task.description, {})}
-      </p>
-      {task.tags.length > 0 && (
+      {task.tags?.length > 0 && (
         <div className="flex flex-row gap-2 overflow-x-auto scrollbar-thumb-gray-900 scrollbar-thin py-2 flex-wrap">
           {task.tags.map((tag) => (
-            <TagWithColor key={tag} tag={tag} />
+            <TagWithColor key={tag._id} tag={tag} />
           ))}
         </div>
       )}
-      {task.links.length > 0 && (
+      {task.links?.length > 0 && (
         <div className="flex flex-row gap-2">
           {task.links.map((link) => (
             <a

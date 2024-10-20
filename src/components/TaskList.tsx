@@ -63,7 +63,7 @@ export const TaskList = () => {
         .toLowerCase()
         .includes(searchFilter.toLowerCase()) ||
       task.tags.some((tag) =>
-        tag.toLowerCase().includes(searchFilter.toLowerCase()),
+        tag.name.toLowerCase().includes(searchFilter.toLowerCase()),
       ) ||
       (searchFilter === 'done' && task.done && !viewCompletes)
     )
@@ -160,7 +160,7 @@ export const TaskList = () => {
               className="hover:bg-gray-900 text-white rounded-md p-2"
               onClick={(e) => {
                 e.preventDefault()
-                open()
+                openCreateTask()
               }}
             >
               <HiFolderAdd />
