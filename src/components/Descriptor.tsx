@@ -101,6 +101,7 @@ export const Descriptor = () => {
 
   useEffect(() => {
     // add event listener to save task when user press Ctrl + S or Cmd + S
+
     const handleSaveTask = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 's') {
         e.preventDefault()
