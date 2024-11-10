@@ -17,6 +17,7 @@ export const TaskList = () => {
     useLocalStorage<boolean>('view-completes', true)
   const { tasks, setTasks } = useTasks()
   const [searchFilter, setSearchFilter] = useState<string>('')
+
   const { value: viewHighPriority, setValue: setViewHighPriority } =
     useLocalStorage('view-high-priority', true)
   const { value: viewMediumPriority, setValue: setViewMediumPriority } =

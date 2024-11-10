@@ -12,6 +12,7 @@ import { useModal } from '../hooks/useModal'
 import { toCapitalizeFirst } from '../utils/texts'
 import { convert } from 'html-to-text'
 import { useSession } from '../context/SessionProvider'
+import { useBlocker } from '@tanstack/react-router'
 
 const ShowTask = lazy(() => import('./ShowTask'))
 const CustomEditor = lazy(() => import('./Editor'))
@@ -19,7 +20,7 @@ const CustomEditor = lazy(() => import('./Editor'))
 export const Descriptor = () => {
   const [idSelectedTask, setIdSelectedTask] = useState<string | null>(null)
   const { sincronize } = useTasks()
-  const { selectedTask, priority, setPriority, setSelectedTask } =
+  const { selectedTask, priority, setPriority, setSelectedTask, setIsEditing } =
     useSelectedTask()
   const { tasks } = useTasks()
   const [editable, setEditable] = useState<boolean>(false)
@@ -118,8 +119,46 @@ export const Descriptor = () => {
     }
   }, [handleSave, editable])
 
-  console.log({ selectedTask })
-  console.log({ user })
+  // Block the user from leaving the page if the task is being edited
+  useBlocker({
+    blockerFn: () => window.confirm('Are you sure you want to leave?'),
+    condition: editable,
+  })
+
+  // prevent close tab if task is being edited
+  useEffect(() => {
+    const handleUnload = (e: BeforeUnloadEvent) => {
+      if (editable) {
+        e.preventDefault()
+
+        window.confirm('Are you sure you want to leave?')
+      }
+    }
+
+    window.addEventListener('beforeunload', handleUnload)
+
+    return () => {
+      window.removeEventListener('beforeunload', handleUnload)
+    }
+  }, [editable])
+
+  useEffect(() => {
+    const handleUnfocusNavigator = () => {
+      if (editable) {
+        handleSave()
+      }
+    }
+
+    window.addEventListener('blur', handleUnfocusNavigator)
+
+    return () => {
+      window.removeEventListener('blur', handleUnfocusNavigator)
+    }
+  }, [handleSave, editable])
+
+  useEffect(() => {
+    setIsEditing(editable)
+  }, [editable])
 
   return (
     <div className="text-white w-2/3 pl-4 flex flex-col overflow-hidden justify-start gap-2 max-h-screen pt-2">
